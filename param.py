@@ -26,7 +26,7 @@ l_t = 0.2
 w_t = 0.2
 
 # initial conditions
-z_i = 0
+z_i = -1
 h_i = w_b/2
 theta_i = 0
 target_i = -l_t/2
@@ -44,6 +44,12 @@ z =  SignalGenerator().sin
 h = SignalGenerator().sin
 theta = SignalGenerator().sin
 
-dr_mat_i = np.array([[-d_br, h_br/2], [-l_b/2, h_br/2], [-l_b/2, w_b/2], [0, 0], [l_b/2, w_b/2], 
+dr_mat_i = np.array([[-d_br, h_br/2], [-l_b/2, h_br/2], [-l_b/2, w_b/2], [l_b/2, w_b/2], 
           [l_b/2, h_br/2], [d_br, h_br/2], [d_br, -h_br/2], [l_b/2, -h_br/2], [l_b/2, -w_b/2], [-l_b/2, -w_b/2], 
           [-l_b/2, -h_br/2], [-d_br, -h_br/2], [-d_br, h_br/2]])
+
+#simulation conditions
+t_start = 0
+t_end = 10
+t_step = 0.023
+t_catch_up = 4

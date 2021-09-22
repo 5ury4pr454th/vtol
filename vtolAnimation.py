@@ -10,11 +10,11 @@ class vtolAnimation:
     def __init__(self) -> None:
         
         self.first = self.first_t = True
-        self.fig, self.ax = plt.subplots()
+        self.fig, self.ax = plt.subplots(figsize = (10,10))
         self.handle = dict()
 
-        self.ax.plot([-2, 2], [0.00,0.00], color = 'black')      
-        self.ax.set_xlim(-2, 2)
+        self.ax.plot([-p.l_g, p.l_g], [0.00,0.00], color = 'black')      
+        self.ax.set_xlim(-p.l_g, p.l_g)
         self.ax.set_ylim(-0.5, 3.5)
 
     
@@ -55,7 +55,7 @@ class vtolAnimation:
     def draw_target(self, x) -> None:
        
         if self.first_t == True:
-            target_body = mpatches.Rectangle([p.target_i,0], p.l_t, p.w_t, edgecolor = 'red', alpha = 0.8)
+            target_body = mpatches.Rectangle([p.target_i, 0], p.l_t, p.w_t, color = 'red', alpha = 0.9)
             self.handle['target'] = target_body
             self.ax.add_patch(self.handle['target'])
             self.first_t = False
