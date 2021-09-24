@@ -12,11 +12,11 @@ anim.draw_target(0)
 t = p.t_start
 
 target_signal = SignalGenerator(amplitude = 0, frequency = np.pi/4)
-drone_signal = SignalGenerator(amplitude = 0, frequency = np.pi/4.5, y_offset = -1.00)
+drone_signal = SignalGenerator(amplitude = 0, frequency = np.pi/4.2, y_offset = -1.00)
 rot_signal = SignalGenerator(amplitude = 0, frequency = np.pi/4)
 max_height = 2.3
 
-plt.pause(10)
+plt.pause(5)
 
 while t < p.t_end:
     
@@ -42,7 +42,4 @@ while t < p.t_end:
     anim.fig.canvas.flush_events()
     
     t += p.t_step
-
-    if p.t_end == t:
-        plt.pause(1.2)
-
+plt.pause(1)

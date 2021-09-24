@@ -15,7 +15,7 @@ class vtolAnimation:
 
         self.ax.plot([-p.l_g, p.l_g], [0.00,0.00], color = 'black')      
         self.ax.set_xlim(-p.l_g, p.l_g)
-        self.ax.set_ylim(-0.5, 3.5)
+        self.ax.set_ylim(-p.l_s, p.l_s)
 
     
     def update(self, z, h, theta, target = 0) -> None:
