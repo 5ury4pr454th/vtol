@@ -7,34 +7,43 @@ import matplotlib.pyplot as plt
 import param as p
 from signal_gen import SignalGenerator
 from vtolAnimation import vtolAnimation
-plt.ion()
-
+from data_plotter import dataPlotter, subplotWindow
 from time import time
+
+plt.ion()
 
 # test animation
 anim = vtolAnimation()
-anim.draw_drone(p.dr_mat_i) # init position, h above centre
+#anim.draw_drone(p.dr_mat_i) # init position, h above centre
 
-plt.pause(0.2)
+
 t = p.t_start
 
-fr = SignalGenerator(amplitude = 15, frequency=10).constant
-fl = SignalGenerator(amplitude = 15, frequency=10).constant
+fr = SignalGenerator(amplitude = 15.153, frequency=0.1)
+fl = SignalGenerator(amplitude = 15.653, frequency=0.1)
 interim_state = [[0, p.w_b/2, 0], [0, 0, 0]]
 drone_sys = systemDynamics(interim_state, p.t_step)
-
+plotter = dataPlotter(only_0=True)
+plt.pause(10)
 while t < p.t_end:
-    if drone_sys.state[0][1] - 5.04 > 0.066 :
-        final_u = p.u_c(drone_sys.state[0][2])*np.array([0, 0, 0])
-    else:
-        final_u = p.u_c(drone_sys.state[0][2])*np.array([fl(t) + fr(t), fl(t) + fr(t), fr(t) - fl(t)])
-
+    
+    if t < 0.2:
+        final_u = p.u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t) , fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
+    elif t < 0.5: 
+        fl.amplitude = 15.153
+        fr.amplitude = 15.653
+        final_u = p.u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t), fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
+    elif (interim_state[2] > -0.02) and (interim_state[2] < -0.01):
+        fl.amplitude = 0
+        fr.amplitude = 0
+        final_u = p.u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t), fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
+    
+    
     interim_state = drone_sys.update(final_u) 
-    
-    print(drone_sys.state[0][1])
-    
     anim.update(interim_state[0], interim_state[1], interim_state[2])
+    plotter.update(t, drone_sys.state, [fr.square(t), fl.square(t)])
     
+
     anim.fig.canvas.draw()
     anim.fig.canvas.update()
     anim.fig.canvas.flush_events()

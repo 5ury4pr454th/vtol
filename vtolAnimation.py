@@ -10,12 +10,13 @@ class vtolAnimation:
     def __init__(self) -> None:
         
         self.first = self.first_t = True
-        self.fig, self.ax = plt.subplots(figsize = (10,10))
+        # self.fig, self.ax = plt.subplots(figsize = (10,10))
+        self.fig, self.ax = plt.subplots()
         self.handle = dict()
 
         self.ax.plot([-p.l_g, p.l_g], [0.00,0.00], color = 'black')      
         self.ax.set_xlim(-p.l_g, p.l_g)
-        self.ax.set_ylim(-p.l_s, p.l_s)
+        self.ax.set_ylim(-0.5, p.l_s)
 
     
     def update(self, z, h, theta, target = 0) -> None:
