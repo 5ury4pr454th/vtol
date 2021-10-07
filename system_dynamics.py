@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import param as p
+import specs as p
 
 # for length
 # let x = (z, z') = (x1, x2)

@@ -9,12 +9,12 @@ class dataPlotter:
         
         # plot initializing
         self.less = only_0
-        self.num_rows = 2
-        self.num_columns = 4
+        self.num_rows = 2                   ############
+        self.num_columns = 4                ############
 
         if only_0 == True:
-            self.num_columns = 5
-            self.num_rows = 1
+            self.num_columns = 5            ############
+            self.num_rows = 1               ############
 
         self.fig, self.ax = plt.subplots(nrows=self.num_rows, ncols=self.num_columns, sharex=True, figsize = (10,10))
         

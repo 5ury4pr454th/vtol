@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import param as p
+import specs as p
 from signal_gen import SignalGenerator
 from vtolAnimation import vtolAnimation
 plt.ion()

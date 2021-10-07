@@ -1,10 +1,10 @@
 # the main script to execute while writing the code
 
 # experiment
-from system_dynam import systemDynamics
+from system_dynamics import systemDynamics
 import numpy as np
 import matplotlib.pyplot as plt
-import param as p
+import specs as p
 from signal_gen import SignalGenerator
 from vtolAnimation import vtolAnimation
 from data_plotter import dataPlotter, subplotWindow
