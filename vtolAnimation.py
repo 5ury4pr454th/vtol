@@ -3,8 +3,7 @@ import matplotlib.patches as mpatches
 import numpy as np
 import specs as p
 
-# plt.ion()
-
+plt.ion()
 class vtolAnimation:
 
     def __init__(self) -> None:
@@ -13,7 +12,7 @@ class vtolAnimation:
         self.fig, self.ax = plt.subplots()
         self.handle = dict()
 
-        self.ax.plot([-p.l_g, p.l_g], [0.00,0.00], color = 'black')      
+        self.ax.plot([-100*p.l_g, 100*p.l_g], [0.00,0.00], color = 'black')      
         self.ax.set_xlim(-p.l_g, p.l_g)
         self.ax.set_ylim(-0.5, p.l_s)
 
@@ -30,6 +29,9 @@ class vtolAnimation:
         # [[cosq, -sinq]
         #  [sinq, cosq]]
 
+        self.ax.set_xlim(z-p.l_g/2, z+p.l_g/2)
+        self.ax.set_ylim(h-p.l_s/4, h + 3*p.l_s/4)
+
         rot_mat = np.array([[np.cos(theta), -np.sin(theta)],
                  [np.sin(theta), np.cos(theta)]])
         stats = np.matmul(rot_mat, p.dr_mat_i.T).T
@@ -41,7 +43,6 @@ class vtolAnimation:
         self.draw_drone(stats)
         if target != 0:
             self.draw_target(target)
-
 
     def draw_drone(self, stats) -> None:
         """draws drone, updates if already exists"""

@@ -72,7 +72,7 @@ class dataPlotter:
             self.handle[1].update(self.time_history, [self.z_1_history])
             self.handle[3].update(self.time_history, [self.h_1_history])
             self.handle[5].update(self.time_history, [self.t_1_history])
-
+            
 class subplotWindow:
     
     def __init__(self, ax, xlabel='', ylabel='', title='', legend = None):
@@ -111,5 +111,3 @@ class subplotWindow:
         # Adjusts the axis to fit all of the data
         self.ax.relim()
         self.ax.autoscale()
-           
-

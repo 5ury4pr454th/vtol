@@ -5,7 +5,6 @@ import numpy as np
 m_c = 1.53
 m_r = m_l = 0.22
 
-
 # inertia specs
 J_c = 0.0049
 
@@ -39,6 +38,7 @@ targetv_i = 0
 l_g = 4
 l_s = 4
 
+# geometric and initial specs
 dr_mat_i = np.array([[-d_br + w_lm/2, h_br/2], [-l_b/2, h_br/2], [-l_b/2, w_b/2], [l_b/2, w_b/2], 
           [l_b/2, h_br/2], [d_br - w_lm/2, h_br/2], [d_br - w_lm/2, w_b/2], [d_br + w_lm/2, w_b/2], [d_br + w_lm/2, -w_b/2], [d_br - w_lm/2, -w_b/2], [d_br - w_lm/2, -h_br/2], [l_b/2, -h_br/2], [l_b/2, -w_b/2], [-l_b/2, -w_b/2], 
           [-l_b/2, -h_br/2], [-d_br + w_lm/2, -h_br/2],[-d_br + w_lm/2, -w_b/2], [-d_br - w_lm/2, -w_b/2], [-d_br - w_lm/2, w_b/2],  [-d_br + w_lm/2, w_b/2], [-d_br + w_lm/2, h_br/2]])
@@ -48,8 +48,9 @@ r_init = np.array([d_br, w_b/2, 0])
 
 #simulation conditions
 t_start = 0
-t_end = 10
-t_step = 0.02
+t_end = 50
+t_step = 0.008
+t_plot = 0.080
 t_catch_up = 4
 g = 9.8
 
@@ -60,5 +61,31 @@ m_u = 0.121
 # sin and cos are bound methods
 
 def u_c(t):
+    """returns with coeffecients for Tau"""
     return np.array([-np.sin(t)/(m_c + m_l + m_r), np.cos(t)/(m_c + m_l + m_r), d_br/(J_c + (m_l + m_r)*(d_br**2))])
 
+# kp, kd, kdc specs
+kd_z = -0.0173
+kp_z = -0.003994
+kp_h = 0.149
+kd_h = 0.7660
+f7kd_h = 0.985
+f7kp_h = 0.1182
+kd_theta = 0.2661
+kp_theta = 0.51755
+kdc_theta = 1.932
+
+# max_values:
+max_force = 20
+max_torque = 20
+
+# saturating motors
+def saturate_motors(a):
+    """saturates left and right motor forces"""
+    if a > 10:
+        a = 10
+    elif a < 0:
+        a = 0
+    else:
+        pass
+    return a
