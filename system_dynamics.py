@@ -23,7 +23,7 @@ class systemDynamics:
         """initializes system and sets EL equation params"""
         # defining parameters for EL equations
         self.state = np.array(init_state)
-        self.params = [[0, 0, 0], [-(p.m_u/(p.m_c + p.m_l + p.m_r)), 0, 0]]
+        self.params = [[0, 0, 0], [-(p._m_u/(p._m_c + p._m_l + p._m_r)), 0, 0]]
         self.constants = [0, -p.g, 0]
         self.time_step = time_step
 
@@ -54,5 +54,5 @@ class systemDynamics:
 
     def limit(self) -> None:
         """introduces physical limitations"""
-        if self.state[0][1] < p.w_b/2:
-            self.state[0][1] = p.w_b/2
+        if self.state[0][1] < p._w_b/2:
+            self.state[0][1] = p._w_b/2

@@ -4,27 +4,31 @@ import specs as p
 class lateralController():
     """A PD controller for controlling the lateral displacement"""
     
-    def __init__(self, saturate_at_0 = True) -> None:
+    def __init__(self) -> None:
         """define manual kp, kd"""
         self.kp = p.kp_z
         self.kd = p.kd_z
+        self.ikp = p.kp_theta
+        self.ikd = p.kd_theta
         self.kdc = p.kdc_theta
         self.limit = p.max_torque
 
-        # if torque cannot be less than 0
-        self.saturate_at_0 = saturate_at_0
-
-    def update(self, z_r, z_data):
+    def update(self, z_r, z_data, theta_data):
         """returns the net torque required, according to reference z"""    
         z = z_data[0]
         z_1 = z_data[1]
+        theta = theta_data[0]
+        theta_1 = theta_data[1]
+
 
         # equilibrium
-        theta_e = 0.00
         tau_e = 0.00
         
-        # PD controlled, input dc gain for inner loop
-        tau_tilde = self.kp*self.kdc*(z_r-z) - self.kd*self.kdc*(z_1)
+        # PD controlled, outer loop 
+        theta_r = self.kp*(z_r-z) - self.kd*(z_1)
+
+        # PD controlled for inner loop
+        tau_tilde = self.ikp*(theta_r-theta) - self.ikd*(theta_1)
         
         # net tau
         net_tau = tau_tilde + tau_e
@@ -36,8 +40,4 @@ class lateralController():
 
     def saturate(self, u):
         """saturates to limit physics"""
-        if abs(u) > self.limit:
-            u = self.limit*np.sign(u)
-        if self.saturate_at_0 == True and u < 0:
-            u = 0.00
         return u

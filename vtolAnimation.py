@@ -34,7 +34,7 @@ class vtolAnimation:
 
         rot_mat = np.array([[np.cos(theta), -np.sin(theta)],
                  [np.sin(theta), np.cos(theta)]])
-        stats = np.matmul(rot_mat, p.dr_mat_i.T).T
+        stats = np.matmul(rot_mat, p._dr_mat_i.T).T
 
         # translation by z and h
         stats = np.add(stats, np.array([z, h])) 
@@ -47,7 +47,7 @@ class vtolAnimation:
     def draw_drone(self, stats) -> None:
         """draws drone, updates if already exists"""
         if self.first == True:
-            drone = mpatches.Polygon(np.add(p.dr_mat_i, [p.z_i, p.h_i]), closed = True)
+            drone = mpatches.Polygon(np.add(p._dr_mat_i, [p.z_i, p.h_i]), closed = True)
             self.handle['drone_body'] = drone
             self.ax.add_patch(drone)
             self.first = False
@@ -57,9 +57,9 @@ class vtolAnimation:
     def draw_target(self, x) -> None:
         """draws target, updates if already exists"""
         if self.first_t == True:
-            target_body = mpatches.Rectangle([p.target_i, 0], p.l_t, p.w_t, color = 'red', alpha = 0.9)
+            target_body = mpatches.Rectangle([p.target_i, 0], p._l_t, p._w_t, color = 'red', alpha = 0.9)
             self.handle['target'] = target_body
             self.ax.add_patch(self.handle['target'])
             self.first_t = False
         else:
-            self.handle['target'].set_x(x - p.l_t/2)
+            self.handle['target'].set_x(x - p._l_t/2)

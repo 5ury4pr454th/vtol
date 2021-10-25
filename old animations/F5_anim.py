@@ -21,22 +21,22 @@ t = p.t_start
 
 fr = SignalGenerator(amplitude = 15.153, frequency=0.1)
 fl = SignalGenerator(amplitude = 15.653, frequency=0.1)
-interim_state = [[0, p.w_b/2, 0], [0, 0, 0]]
+interim_state = [[0, p._w_b/2, 0], [0, 0, 0]]
 drone_sys = systemDynamics(interim_state, p.t_step)
 plotter = dataPlotter(only_0=True)
 plt.pause(10)
 while t < p.t_end:
     
     if t < 0.2:
-        final_u = p.u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t) , fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
+        final_u = p._u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t) , fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
     elif t < 0.5: 
         fl.amplitude = 15.153
         fr.amplitude = 15.653
-        final_u = p.u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t), fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
+        final_u = p._u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t), fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
     elif (interim_state[2] > -0.02) and (interim_state[2] < -0.01):
         fl.amplitude = 0
         fr.amplitude = 0
-        final_u = p.u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t), fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
+        final_u = p._u_c(drone_sys.state[0][2])*np.array([fl.square(t) + fr.square(t), fl.square(t) + fr.square(t), fr.square(t) - fl.square(t)])
     
     
     interim_state = drone_sys.update(final_u) 

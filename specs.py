@@ -1,34 +1,54 @@
 from signal_gen import SignalGenerator
 import numpy as np
 
+#################################### DO NOT CHANGE !!!!! ##################################################
+
 # mass specs
-m_c = 1.53
-m_r = m_l = 0.22
+_m_c = 1.53
+_m_r = _m_l = 0.22
 
 # inertia specs
-J_c = 0.0049
+_J_c = 0.0049
 
 # body-rotor bridge dimension
-d_br = 0.38
-h_br = 0.05
+_d_br = 0.38
+_h_br = 0.05
 
 # body dimensions
-l_b = 0.2
-w_b = 0.2
+_l_b = 0.2
+_w_b = 0.2
 
 # rotor dimensions
-w_rm = w_lm = 0.25
-h_rm = h_lm = w_b
+_w_rm = _w_lm = 0.25
+_h_rm = _h_lm = _w_b
 
 # target dimensions
-l_t = 0.2
-w_t = 0.2
+_l_t = 0.2
+_w_t = 0.2
+
+# geometric and initial specs
+_dr_mat_i = np.array([[-_d_br + _w_lm/2, _h_br/2], [-_l_b/2, _h_br/2], [-_l_b/2, _w_b/2], [_l_b/2, _w_b/2], 
+          [_l_b/2, _h_br/2], [_d_br - _w_lm/2, _h_br/2], [_d_br - _w_lm/2, _w_b/2], [_d_br + _w_lm/2, _w_b/2], [_d_br + _w_lm/2, -_w_b/2], [_d_br - _w_lm/2, -_w_b/2], [_d_br - _w_lm/2, -_h_br/2], [_l_b/2, -_h_br/2], [_l_b/2, -_w_b/2], [-_l_b/2, -_w_b/2], 
+          [-_l_b/2, -_h_br/2], [-_d_br + _w_lm/2, -_h_br/2],[-_d_br + _w_lm/2, -_w_b/2], [-_d_br - _w_lm/2, -_w_b/2], [-_d_br - _w_lm/2, _w_b/2],  [-_d_br + _w_lm/2, _w_b/2], [-_d_br + _w_lm/2, _h_br/2]])
+
+_l_init = np.array([-_d_br, _w_b/2, 0])
+_r_init = np.array([_d_br, _w_b/2, 0])
+
+def _u_c(t):
+    """returns with coeffecients for Tau"""
+    return np.array([-np.sin(t)/(_m_c + _m_l + _m_r), np.cos(t)/(_m_c + _m_l + _m_r), _d_br/(_J_c + (_m_l + _m_r)*(_d_br**2))])
+
+# damping specs
+_m_u = 0.121
+
+#################################### DO NOT CHANGE !!!!! ##################################################
+
 
 # initial conditions
 z_i = -1
-h_i = w_b/2
+h_i = _w_b/2
 theta_i = 0
-target_i = -l_t/2
+target_i = -_l_t/2
 zv_i = 0
 hv_i = 0
 thetav_i = 0
@@ -38,42 +58,28 @@ targetv_i = 0
 l_g = 4
 l_s = 4
 
-# geometric and initial specs
-dr_mat_i = np.array([[-d_br + w_lm/2, h_br/2], [-l_b/2, h_br/2], [-l_b/2, w_b/2], [l_b/2, w_b/2], 
-          [l_b/2, h_br/2], [d_br - w_lm/2, h_br/2], [d_br - w_lm/2, w_b/2], [d_br + w_lm/2, w_b/2], [d_br + w_lm/2, -w_b/2], [d_br - w_lm/2, -w_b/2], [d_br - w_lm/2, -h_br/2], [l_b/2, -h_br/2], [l_b/2, -w_b/2], [-l_b/2, -w_b/2], 
-          [-l_b/2, -h_br/2], [-d_br + w_lm/2, -h_br/2],[-d_br + w_lm/2, -w_b/2], [-d_br - w_lm/2, -w_b/2], [-d_br - w_lm/2, w_b/2],  [-d_br + w_lm/2, w_b/2], [-d_br + w_lm/2, h_br/2]])
-
-l_init = np.array([-d_br, w_b/2, 0])
-r_init = np.array([d_br, w_b/2, 0])
-
 #simulation conditions
 t_start = 0
-t_end = 50
-t_step = 0.008
-t_plot = 0.080
+t_end = 75
+t_step = 0.08
+t_plot = 0.20
 t_catch_up = 4
 g = 9.8
 
-# damping specs
-m_u = 0.121
-
-# coeffs of u with inputs fl,fr
-# sin and cos are bound methods
-
-def u_c(t):
-    """returns with coeffecients for Tau"""
-    return np.array([-np.sin(t)/(m_c + m_l + m_r), np.cos(t)/(m_c + m_l + m_r), d_br/(J_c + (m_l + m_r)*(d_br**2))])
+########################################## PID params ONLY !!! ##############################################
 
 # kp, kd, kdc specs
 kd_z = -0.0173
 kp_z = -0.003994
+
 kp_h = 0.149
 kd_h = 0.7660
-f7kd_h = 0.985
-f7kp_h = 0.1182
+
 kd_theta = 0.2661
 kp_theta = 0.51755
 kdc_theta = 1.932
+
+########################################## PID params ONLY !!! ##############################################
 
 # max_values:
 max_force = 20

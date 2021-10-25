@@ -10,7 +10,7 @@ from lateral_control import lateralController
 from altitude_control import AltitudeController
 
 # initial state
-interim_state = [[0, p.w_b/2, 0], [0, 0, 0]]
+interim_state = [[0, p._w_b/2, 0], [0, 0, 0]]
 
 # creating signal objects according to F8
 reference_signal = SignalGenerator(amplitude=3, frequency=0.08)
@@ -32,6 +32,7 @@ anim_engine = vtolAnimation()
 t = p.t_start
 init_state = dynamics.h()
 print(f"Initial coordinates: {init_state}")
+plt.pause(10)
 
 while t < p.t_end:
 
@@ -67,7 +68,7 @@ while t < p.t_end:
         fr = p.saturate_motors(fr)
 
         # updating the dynamics of the system, using controller outputs
-        y = dynamics.update(p.u_c(dynamics.state[0][2])*np.array([fr + fl, fr + fl, fr - fl]))
+        y = dynamics.update(p._u_c(dynamics.state[0][2])*np.array([fr + fl, fr + fl, fr - fl]))
 
         # going for next time step
         t = t + p.t_step

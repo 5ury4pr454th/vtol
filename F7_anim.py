@@ -9,7 +9,7 @@ from system_dynamics import systemDynamics
 from altitude_control import AltitudeController
 
 # initial state
-interim_state = [[0, p.w_b/2, 0], [0, 0, 0]]
+interim_state = [[0, p._w_b/2, 0], [0, 0, 0]]
 
 # creating signal objects
 reference_signal = SignalGenerator(amplitude=1)
@@ -27,6 +27,7 @@ anim_engine = vtolAnimation()
 t = p.t_start
 init_state = dynamics.h()
 print(f"Initial coordinates: {init_state}")
+plt.pause(10)
 
 while t < p.t_end:
 
@@ -48,7 +49,7 @@ while t < p.t_end:
         u = alt_control.update(r, h_state)
 
         # updating the dynamics of the system, using controller output
-        y = dynamics.update(p.u_c(dynamics.state[0][2])*np.array([u, u, 0]))
+        y = dynamics.update(p._u_c(dynamics.state[0][2])*np.array([u, u, 0]))
 
         # going for next time step
         t = t + p.t_step
