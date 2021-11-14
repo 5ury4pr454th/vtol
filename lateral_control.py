@@ -4,13 +4,13 @@ import specs as p
 class lateralController():
     """A PD controller for controlling the lateral displacement"""
     
-    def __init__(self) -> None:
+    def __init__(self, kp_z = p.kp_z, kd_z = p.kd_z, kdc = p.kdc_theta) -> None:
         """define manual kp, kd"""
-        self.kp = p.kp_z
-        self.kd = p.kd_z
+        self.kp = kp_z
+        self.kd = kd_z
         self.ikp = p.kp_theta
         self.ikd = p.kd_theta
-        self.kdc = p.kdc_theta
+        self.kdc = kdc
         self.limit = p.max_torque
 
     def update(self, z_r, z_data, theta_data):

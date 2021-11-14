@@ -4,10 +4,17 @@ import matplotlib.pyplot as plt
 from f7plot import responsePlotter
 from data_plotter import dataPlotter
 from signal_gen import SignalGenerator
-from vtolAnimation import vtolAnimation
 from system_dynamics import systemDynamics
 from lateral_control import lateralController
 from altitude_control import AltitudeController
+from find_best_tr import return_ks
+
+t_rise_alt = float(input())
+t_rise_lateral = float(input())
+
+# optimal 10.47 relative to the t_start and t_end
+
+o_kd_alt, o_kp_alt, o_kdc_lat, o_kd_lat, o_kp_lat =  return_ks(t_rise_alt, t_rise_lateral)
 
 # initial state
 interim_state = [[0, p._w_b/2, 0], [0, 0, 0]]
@@ -20,12 +27,11 @@ disturbance_2 = SignalGenerator(amplitude=0.25)
 
 # creating dynamics and altitude and lateral controllers for question F8
 dynamics = systemDynamics(interim_state, p.t_step)
-alt_control = AltitudeController()
-lat_control = lateralController()
+alt_control = AltitudeController(kd_h = o_kd_alt,kp_h = o_kp_alt)
+lat_control = lateralController(kd_z=o_kd_lat, kp_z = o_kp_lat, kdc=o_kdc_lat)
 
 # drawing animation and plotting reference, input and output
 plot_engine = responsePlotter()
-anim_engine = vtolAnimation()
 
 # setting start time and getting initial state
 t = p.t_start
@@ -62,12 +68,22 @@ while t < p.t_end:
         fr = (u_alt + u_lat/p._d_br)/2
 
         # saturating fl and fr
-        fl = 10.00 if fl > 10.00 else fl
-        fr = 10.00 if fr > 10.00 else fr
-        fl = 0.00 if fl < 0.00 else fl
-        fr = 0.00 if fr < 0.00 else fr
 
-        # Note that in the beggining there is atleast one instance of overshoot
+        assert fl <= 10,"Left Force exceeded max"
+        
+        assert fl >= 0,"Left Force exceeded min"
+        
+        assert fr <= 10,"Right Force exceeded max"
+        
+        assert fr >= 0,"Right Force exceeded max"
+
+        print(fl, fr)
+
+        # fl = 10.00 if fl > 10.00 else fl
+        # fr = 10.00 if fr > 10.00 else fr
+        # fl = 0.00 if fl < 0.00 else fl
+        # fr = 0.00 if fr < 0.00 else fr
+
 
         # updating the dynamics of the system, using controller outputs
         y = dynamics.update(p._u_c(dynamics.state[0][2])*np.array([fl + fr, fl + fr, fr-fl]))
@@ -76,9 +92,7 @@ while t < p.t_end:
         t = t + p.t_step
 
     # update animation and data plots for lateral displacement
-    anim_engine.update(dynamics.state[0][0], dynamics.state[0][1], dynamics.state[0][2])
     plot_engine.update(t, dynamics.state[0][0], r2, u_lat)
-    
     # to pause in the middle for better visibility
     plt.pause(0.0005)
 

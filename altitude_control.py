@@ -5,11 +5,11 @@ class AltitudeController():
     
     """A PD controller for controlling the altitude"""
     
-    def __init__(self, saturate_at_0 = True) -> None:
+    def __init__(self, saturate_at_0 = True, kp_h = p.kp_h, kd_h = p.kd_h) -> None:
         """define manual kp, kd"""
 
-        self.kp = p.kp_h
-        self.kd = p.kd_h
+        self.kp = kp_h
+        self.kd = kd_h
 
         self.limit = p.max_force
         self.saturate_at_0 = saturate_at_0
